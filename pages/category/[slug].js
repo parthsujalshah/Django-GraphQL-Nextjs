@@ -74,7 +74,7 @@ function Home({ posts, categories }) {
 
 export async function getStaticPaths() {
     return {
-        paths: [{ params: { slug: "" } }],
+        paths: [{ params: { slug: "shoes" } }],
         fallback: true,
     };
 }

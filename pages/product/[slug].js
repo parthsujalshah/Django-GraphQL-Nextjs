@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Product({ post }) {
+function Product({ post, categories }) {
     const classes = useStyles();
     const router = useRouter();
 
@@ -52,11 +52,11 @@ function Product({ post }) {
     }
 
     return (
-        <div>
+        <>
             <Head>
                 <title>{post.title}</title>
             </Head>
-            {/* <Header data={categories} /> */}
+            <Header data={categories} />
             <Container maxWidth="md">
                 <Grid container spacing={0}>
                     <Hidden only={["xs", "sm"]}>
@@ -66,8 +66,8 @@ function Product({ post }) {
                                     <div key={c.id}>
                                         <Paper className={classes.paperImage} elevation={0}>
                                             <img
-                                                src={c.image}
-                                                alt={c.alt_text}
+                                                src={post.product_image[0].image}
+                                                alt={post.product_image[0].alt_text}
                                                 className={classes.img}
                                             />
                                         </Paper>
@@ -100,25 +100,33 @@ function Product({ post }) {
                     </Grid>
                 </Grid>
             </Container>
-        </div>
+        </>
     );
-};
+}
 
 export async function getStaticPaths() {
     return {
-        paths: [{ params: { slug: "" } }],
-        fallback: true
+        paths: [{ params: { slug: "boots-3" } }],
+        fallback: true,
     };
-};
+}
 
 export async function getStaticProps({ params }) {
+
     const res = await fetch(`http://127.0.0.1:8000/api/${params.slug}`);
     const post = await res.json();
+
+    const ress = await fetch("http://127.0.0.1:8000/api/category/");
+    const categories = await ress.json();
+
+
     return {
         props: {
-            post
-        }
+            post,
+            categories,
+        },
     };
-};
+
+}
 
 export default Product;

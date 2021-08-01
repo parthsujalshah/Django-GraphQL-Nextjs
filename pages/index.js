@@ -1,13 +1,13 @@
 import { makeStyles } from "@material-ui/core/styles";
+import Header from "../components/header";
+import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import Link from "next/link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import Header from "../components/Header";
-import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   example: {
@@ -17,25 +17,25 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(8),
   },
   card: {
-    heigth: "100%",
+    height: "100%",
     display: "flex",
     flexDirection: "column",
     borderRadius: "0",
   },
   cardMedia: {
-    paddingTop: "140%"
-  }
+    paddingTop: "140%",
+  },
 }));
 
-function Home({ posts }) {
+function Home({ posts, categories }) {
   const classes = useStyles();
+
   return (
     <div>
-      <Header />
+      <Header data={categories} />
       <main>
         <Container className={classes.cardGrid} maxWidth="lg">
           <Grid container spacing={2}>
-            {console.log(posts)}
             {posts.map((post) => (
               <Link key={post.id} href={`product/${encodeURIComponent(post.slug)}`}>
                 <Grid item xs={6} sm={4} md={3}>
@@ -43,6 +43,7 @@ function Home({ posts }) {
                     <CardMedia
                       className={classes.cardMedia}
                       image={post.product_image[0].image}
+                      title="Image title"
                       alt={post.product_image[0].alt_text}
                     />
                     <CardContent>
@@ -50,7 +51,7 @@ function Home({ posts }) {
                         {post.title}
                       </Typography>
                       <Box component="p" fontSize={16} fontWeight={900}>
-                        ${post.regular_price}
+                        £{post.regular_price}
                       </Box>
                     </CardContent>
                   </Card>
@@ -62,16 +63,21 @@ function Home({ posts }) {
       </main>
     </div>
   );
-};
+}
 
 export async function getStaticProps() {
   const res = await fetch("http://127.0.0.1:8000/api/");
   const posts = await res.json();
+
+  const ress = await fetch("http://127.0.0.1:8000/api/category/");
+  const categories = await ress.json();
+
   return {
     props: {
-      posts
-    }
+      posts,
+      categories,
+    },
   };
-};
+}
 
 export default Home;

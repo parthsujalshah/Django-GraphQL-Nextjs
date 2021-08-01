@@ -20,7 +20,11 @@ class CategoryItemView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        return Product.objects.filter(category__slug=self.kwargs["slug"])
+        return Product.objects.filter(
+            category__in=Category.objects.get(slug=self.kwargs["slug"]).get_descendants(
+                include_self=True
+            )
+        )
 
 
 class CategoryListView(generics.ListAPIView):
