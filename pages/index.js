@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     borderRadius: "0",
+  },
+  cardMedia: {
+    paddingTop: "140%"
   }
 }));
 
@@ -37,7 +40,11 @@ function Home({ posts }) {
               <Link key={post.id} href="/">
                 <Grid item xs={6} sm={4} md={3}>
                   <Card className={classes.card} elevation={0}>
-                    <CardMedia></CardMedia>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={post.product_image[0].image}
+                      alt={post.product_image[0].alt_text}
+                    />
                     <CardContent>
                       <Typography gutterBottom component="p">
                         {post.title}

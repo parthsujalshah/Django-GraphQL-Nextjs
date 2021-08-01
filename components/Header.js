@@ -81,6 +81,23 @@ export default function Header() {
                     <Toolbar className={classes.toolbarDesktop}></Toolbar>
                 </Container>
             </AppBar>
+            <AppBar
+                position="relative"
+                elevation={0}
+                className={classes.appbarSecondary}
+            >
+                <Container maxWidth="lg">
+                    <Toolbar className={classes.toolbarSecondary}>
+                        {/* <List className={classes.menuList}>
+                            {data.map((category) => (
+                                <ListItem key={category.name} className={classes.menuListItem}>
+                                    <Link href={`/category/${encodeURIComponent(category.slug)}`}><a className={classes.listItemLink}>{category.name}</a></Link>
+                                </ListItem>
+                            ))}
+                        </List> */}
+                    </Toolbar>
+                </Container>
+            </AppBar>
             <AppBar position="static" elevation={0} className={classes.appbarMain}>
                 <Container maxWidth="lg">
                     <Toolbar className={classes.toolbarMain}>
@@ -97,6 +114,15 @@ export default function Header() {
                             />
                         </svg>
                     </Toolbar>
+                </Container>
+            </AppBar>
+            <AppBar
+                position="relative"
+                elevation={0}
+                className={classes.appbarPromotion}
+            >
+                <Container maxWidth="lg">
+                    <Toolbar className={classes.toolbarPromotion}></Toolbar>
                 </Container>
             </AppBar>
         </nav>
