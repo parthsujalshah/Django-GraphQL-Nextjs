@@ -37,7 +37,7 @@ function Home({ posts }) {
           <Grid container spacing={2}>
             {console.log(posts)}
             {posts.map((post) => (
-              <Link key={post.id} href="/">
+              <Link key={post.id} href={`product/${encodeURIComponent(post.slug)}`}>
                 <Grid item xs={6} sm={4} md={3}>
                   <Card className={classes.card} elevation={0}>
                     <CardMedia
