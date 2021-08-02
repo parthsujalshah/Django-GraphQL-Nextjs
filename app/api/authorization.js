@@ -1,5 +1,5 @@
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import { Router } from "next/dist/client/router";
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from "@apollo/client";
+import Router from 'next/router'
 import { useState, useContext, createContext } from "react";
 import { loginMutation } from "./graphql"
 
@@ -9,7 +9,9 @@ export function AuthProvider({ children }) {
     const auth = userAuthentication();
     return (
         <AuthContext.Provider value={auth}>
-            {children}
+            <ApolloProvider client={auth.createApolloClient()}>
+                {children}
+            </ApolloProvider>
         </AuthContext.Provider>
     );
 };
@@ -22,6 +24,13 @@ export const useAuthentication = () => {
 function userAuthentication() {
     const [authToken, setAuthToken] = useState(null);
     const [username, setUsername] = useState(null);
+
+    const isSignedIn = () => {
+        if (authToken) {
+            return true;
+        }
+        return false;
+    };
 
     function createApolloClient() {
         const link = new HttpLink({
@@ -45,14 +54,14 @@ function userAuthentication() {
             setUsername(data.data.tokenAuth.payload.username);
             localStorage.setItem("token", JSON.stringify(data?.data?.tokenAuth?.token));
             console.log(data);
-            // Router.push("/dashboard");
+            Router.push("/dashboard");
         }
     };
 
     return {
         signIn,
-        // createApolloClient,
-        // isSignedIn
+        createApolloClient,
+        isSignedIn
     };
 
 };

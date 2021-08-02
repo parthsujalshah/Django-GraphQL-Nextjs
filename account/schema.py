@@ -13,13 +13,13 @@ class UserType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
-    user_details = graphene.List(UserType)
+    user_details = graphene.Field(UserType)
 
     def resolve_user_details(root, info, **kwargs):
         user = info.context.user
         if not user.is_authenticated:
             raise Exception("Unauthenticated")
-        return User.objects.all()
+        return User.objects.get(username=user)
 
 
 class Mutation(graphene.ObjectType):
