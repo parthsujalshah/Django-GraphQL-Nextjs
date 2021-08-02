@@ -7,6 +7,8 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
+import { gql } from "@apollo/client";
+import client from "../api/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,12 +64,12 @@ function Product({ post, categories }) {
                     <Hidden only={["xs", "sm"]}>
                         <Grid item sm={1}>
                             <Paper className={classes.paperImagePreview} elevation={0}>
-                                {post.product_image.map((c) => (
+                                {post.productImage.map((c) => (
                                     <div key={c.id}>
                                         <Paper className={classes.paperImage} elevation={0}>
                                             <img
-                                                src={post.product_image[0].image}
-                                                alt={post.product_image[0].alt_text}
+                                                src={c.image}
+                                                alt={c.altText}
                                                 className={classes.img}
                                             />
                                         </Paper>
@@ -79,8 +81,8 @@ function Product({ post, categories }) {
                     <Grid item xs={12} sm={6}>
                         <Paper className={classes.paperImage} elevation={0}>
                             <img
-                                src={post.product_image[0].image}
-                                alt={post.product_image[0].alt_text}
+                                src={post.productImage[0].image}
+                                alt={post.productImage[0].altText}
                                 className={classes.img}
                             />
                         </Paper>
@@ -91,7 +93,7 @@ function Product({ post, categories }) {
                                 {post.title}
                             </Box>
                             <Box component="p" fontSize={22} fontWeight="900" m={0}>
-                                £{post.regular_price}
+                                £{post.regularPrice}
                             </Box>
                             <Box component="p" m={0} fontSize={14}>
                                 Free Delivery & Returns (Ts&Cs apply)
@@ -113,16 +115,32 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
 
-    const res = await fetch(`http://127.0.0.1:8000/api/${params.slug}`);
-    const post = await res.json();
-
     const ress = await fetch("http://127.0.0.1:8000/api/category/");
     const categories = await ress.json();
 
+    const PRODUCT_DATA = gql`
+    query($slug: String!){
+        allProductsByName(slug: $slug){
+            title
+            regularPrice
+            productImage{
+                id
+                image
+                altText
+            }
+        }
+    }
+    `;
+
+    const slug = params.slug;
+    const { data } = await client.query({
+        query: PRODUCT_DATA,
+        variables: { slug }
+    });
 
     return {
         props: {
-            post,
+            post: data.allProductsByName,
             categories,
         },
     };

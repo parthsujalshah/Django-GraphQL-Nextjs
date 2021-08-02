@@ -42,7 +42,6 @@ function Home({ posts, categories }) {
             <main>
                 <Container className={classes.cardGrid} maxWidth="lg">
                     <Grid container spacing={2}>
-                        {console.log(posts)}
                         {posts.map((post) => (
                             <Link key={post.id} href={`/product/${encodeURIComponent(post.slug)}`}>
                                 <Grid item xs={6} sm={4} md={3}>

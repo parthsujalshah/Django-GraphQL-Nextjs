@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Home({ posts, categories, data }) {
+function Home({ categories, data }) {
   const classes = useStyles();
 
   return (
@@ -42,12 +42,12 @@ function Home({ posts, categories, data }) {
               <Link key={post.id} href={`product/${encodeURIComponent(post.slug)}`}>
                 <Grid item xs={6} sm={4} md={3}>
                   <Card className={classes.card} elevation={0}>
-                    {/* <CardMedia
+                    <CardMedia
                       className={classes.cardMedia}
-                      image={post.product_image[0].image}
+                      image={post.productImage[0].image}
                       title="Image title"
-                      alt={post.product_image[0].alt_text}
-                    /> */}
+                      alt={post.productImage[0].altText}
+                    />
                     <CardContent>
                       <Typography gutterBottom component="p">
                         {post.title}
@@ -68,9 +68,6 @@ function Home({ posts, categories, data }) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch("http://127.0.0.1:8000/api/");
-  const posts = await res.json();
-
   const ress = await fetch("http://127.0.0.1:8000/api/category/");
   const categories = await ress.json();
 
@@ -82,6 +79,11 @@ export async function getStaticProps() {
         description
         regularPrice
         slug
+        productImage{
+          id
+          image
+          altText
+        }
       }
     }
     `
@@ -90,7 +92,6 @@ export async function getStaticProps() {
   return {
     props: {
       data: data.allProducts,
-      posts,
       categories,
     },
   };
