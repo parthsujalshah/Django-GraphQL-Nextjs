@@ -71,8 +71,6 @@ export default function Header({ data }) {
 
 
     const classes = useStyles();
-    console.log('data');
-    console.log(data);
 
     return (
         <nav>

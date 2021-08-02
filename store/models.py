@@ -68,7 +68,7 @@ class Product(models.Model):
     """
 
     product_type = models.ForeignKey(ProductType, on_delete=models.RESTRICT)
-    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT, related_name="category")
     title = models.CharField(
         verbose_name=_("title"),
         help_text=_("Required"),

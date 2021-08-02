@@ -9,6 +9,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useRouter } from "next/router";
+import { gql } from "@apollo/client";
+import client from "../api/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
     example: {
@@ -42,23 +44,22 @@ function Home({ posts, categories }) {
             <main>
                 <Container className={classes.cardGrid} maxWidth="lg">
                     <Grid container spacing={2}>
-                        {console.log(posts)}
                         {posts.map((post) => (
                             <Link key={post.id} href={`/product/${encodeURIComponent(post.slug)}`}>
                                 <Grid item xs={6} sm={4} md={3}>
                                     <Card className={classes.card} elevation={0}>
                                         <CardMedia
                                             className={classes.cardMedia}
-                                            image={post.product_image[0].image}
+                                            image={post.productImage[0].image}
                                             title="Image title"
-                                            alt={post.product_image[0].alt_text}
+                                            alt={post.productImage[0].altText}
                                         />
                                         <CardContent>
                                             <Typography gutterBottom component="p">
                                                 {post.title}
                                             </Typography>
                                             <Box component="p" fontSize={16} fontWeight={900}>
-                                                £{post.regular_price}
+                                                £{post.regularPrice}
                                             </Box>
                                         </CardContent>
                                     </Card>
@@ -80,15 +81,37 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-    const res = await fetch(`http://127.0.0.1:8000/api/category/${params.slug}`);
-    const posts = await res.json();
-
     const ress = await fetch("http://127.0.0.1:8000/api/category/");
     const categories = await ress.json();
 
+    const ALL_PRODUCTS = gql`
+    query ($name: String!){
+        categoryByName(name: $name) {
+            id
+            category {
+                id
+                title
+                description
+                regularPrice
+                productImage {
+                    id
+                    image
+                    altText
+                }
+            }
+        }
+    }
+    `;
+
+    const name = params.slug;
+    const { data } = await client.query({
+        query: ALL_PRODUCTS,
+        variables: { name }
+    });
+
     return {
         props: {
-            posts,
+            posts: data.categoryByName.category,
             categories,
         },
     };

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "store",
     "mptt",
     "rest_framework",
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,5 @@ MEDIA_ROOT = BASE_DIR / "media/"
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"]
 }
+
+GRAPHENE = {"SCHEMA": "store.schema.schema"}
