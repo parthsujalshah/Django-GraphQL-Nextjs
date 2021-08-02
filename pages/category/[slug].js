@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../../components/header";
+import Header from "../../app/components/Header";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useRouter } from "next/router";
 import { gql } from "@apollo/client";
-import client from "../api/apollo-client";
+import client from "../../app/api/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
     example: {

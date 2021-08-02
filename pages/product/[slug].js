@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Header from "../../components/header";
+import Header from "../../app/components/Header";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
 import { gql } from "@apollo/client";
-import client from "../api/apollo-client";
+import client from "../../app/api/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
     root: {
