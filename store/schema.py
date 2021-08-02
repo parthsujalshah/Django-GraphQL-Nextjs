@@ -7,7 +7,7 @@ from .models import Product
 class ProductType(DjangoObjectType):
     class Meta:
         model = Product
-        fields = ["id", "title", "description"]
+        fields = ["id", "title", "description", "regular_price", "slug"]
 
 
 class Query(graphene.ObjectType):
