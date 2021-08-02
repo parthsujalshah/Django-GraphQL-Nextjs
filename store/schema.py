@@ -12,7 +12,7 @@ class ProductType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
-    all_products = graphene.List(Product)
+    all_products = graphene.List(ProductType)
 
     def resolve_all_products(root, info):
         return Product.objects.all()
