@@ -1,7 +1,13 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from .models import Product, ProductImage
+from .models import Category, Product, ProductImage
+
+
+class CategoryType(DjangoObjectType):
+    class Meta:
+        model = Category
+        fields = ["id", "name", "category", "level"]
 
 
 class ProductImageType(DjangoObjectType):
@@ -23,8 +29,15 @@ class ProductType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
+    category_by_name = graphene.Field(CategoryType, name=graphene.String(required=True))
     all_Products = graphene.List(ProductType)
     all_Products_by_name = graphene.Field(ProductType, slug=graphene.String(required=True))
+
+    def resolve_category_by_name(root, info, name):
+        try:
+            return Category.objects.get(name=name)
+        except Category.DoesNotExist:
+            return None
 
     def resolve_all_Products_by_name(root, info, slug):
         try:
