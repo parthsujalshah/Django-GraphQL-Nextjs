@@ -5,6 +5,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useAuthentication } from "../app/api/authorization";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -28,9 +29,11 @@ const SignIn = () => {
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const { signIn } = useAuthentication();
 
     function onSubmit(e) {
         e.preventDefault();
+        signIn({ username, password });
     };
 
     return (
