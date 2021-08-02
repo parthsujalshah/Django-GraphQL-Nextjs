@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../../components/header";
+import Header from "../../app/components/Header";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
@@ -9,8 +9,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useRouter } from "next/router";
-import { gql } from "@apollo/client";
-import client from "../api/apollo-client";
+import { allCatQuery, productsByCategory } from "../../app/api/graphql";
+import newApolloClient from "../../app/api/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
     example: {
@@ -81,38 +81,22 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-    const ress = await fetch("http://127.0.0.1:8000/api/category/");
-    const categories = await ress.json();
 
-    const ALL_PRODUCTS = gql`
-    query ($name: String!){
-        categoryByName(name: $name) {
-            id
-            category {
-                id
-                title
-                description
-                regularPrice
-                productImage {
-                    id
-                    image
-                    altText
-                }
-            }
-        }
-    }
-    `;
+    const client = newApolloClient();
 
+    const qry1 = await client.query({
+        query: allCatQuery
+    });
     const name = params.slug;
-    const { data } = await client.query({
-        query: ALL_PRODUCTS,
+    const qry2 = await client.query({
+        query: productsByCategory,
         variables: { name }
     });
 
     return {
         props: {
-            posts: data.categoryByName.category,
-            categories,
+            posts: qry2.data.categoryByName.category,
+            categories: qry1.data.allCategories,
         },
     };
 }

@@ -51,6 +51,3 @@ class Query(graphene.ObjectType):
 
     def resolve_all_Products(root, info):
         return Product.objects.all()
-
-
-schema = graphene.Schema(query=Query)

@@ -1,14 +1,14 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Header from "../../components/header";
+import Header from "../../app/components/Header";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
-import { gql } from "@apollo/client";
-import client from "../api/apollo-client";
+import { allCatQuery, singleProductQuery } from "../../app/api/graphql";
+import newApolloClient from "../../app/api/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -115,42 +115,20 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
 
-    const categories = await client.query({
-        query: gql`
-        query Categories{
-            allCategories{
-                id
-                name
-                slug
-            }
-        }
-        `
+    const client = newApolloClient();
+    const qry1 = await client.query({
+        query: allCatQuery
     });
-
-    const PRODUCT_DATA = gql`
-    query($slug: String!){
-        allProductsByName(slug: $slug){
-            title
-            regularPrice
-            productImage{
-                id
-                image
-                altText
-            }
-        }
-    }
-    `;
-
     const slug = params.slug;
-    const { data } = await client.query({
-        query: PRODUCT_DATA,
+    const qry2 = await client.query({
+        query: singleProductQuery,
         variables: { slug }
     });
 
     return {
         props: {
-            post: data.allProductsByName,
-            categories: categories.data.allCategories,
+            post: qry2.data.allProductsByName,
+            categories: qry1.data.allCategories,
         },
     };
 
