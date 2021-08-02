@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "store",
+    "account",
     "mptt",
-    "rest_framework",
     "graphene_django",
 ]
 
@@ -131,8 +131,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media/"
 
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"]
+
+GRAPHENE = {
+    "SCHEMA": "core.schema.schema",
+    "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
 }
 
-GRAPHENE = {"SCHEMA": "store.schema.schema"}
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
