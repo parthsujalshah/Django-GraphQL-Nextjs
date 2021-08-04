@@ -1,0 +1,3 @@
+Serve React from Django:
+    - npm run build .
+    - Change the TEMPLATES settings

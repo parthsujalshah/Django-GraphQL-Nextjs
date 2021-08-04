@@ -56,7 +56,7 @@ function Product({ post, categories }) {
     return (
         <>
             <Head>
-                <title>{post.title}</title>
+                <title>{post?.title}</title>
             </Head>
             <Header data={categories} />
             <Container maxWidth="md">
@@ -64,7 +64,7 @@ function Product({ post, categories }) {
                     <Hidden only={["xs", "sm"]}>
                         <Grid item sm={1}>
                             <Paper className={classes.paperImagePreview} elevation={0}>
-                                {post.productImage.map((c) => (
+                                {post?.productImage.map((c) => (
                                     <div key={c.id}>
                                         <Paper className={classes.paperImage} elevation={0}>
                                             <img
@@ -81,8 +81,8 @@ function Product({ post, categories }) {
                     <Grid item xs={12} sm={6}>
                         <Paper className={classes.paperImage} elevation={0}>
                             <img
-                                src={post.productImage[0].image}
-                                alt={post.productImage[0].altText}
+                                src={post?.productImage[0].image}
+                                alt={post?.productImage[0].altText}
                                 className={classes.img}
                             />
                         </Paper>
@@ -90,10 +90,10 @@ function Product({ post, categories }) {
                     <Grid item xs={12} sm={5}>
                         <Paper className={classes.paperRight} elevation={0}>
                             <Box component="h1" fontSize={18} fontWeight="400">
-                                {post.title}
+                                {post?.title}
                             </Box>
                             <Box component="p" fontSize={22} fontWeight="900" m={0}>
-                                £{post.regularPrice}
+                                £{post?.regularPrice}
                             </Box>
                             <Box component="p" m={0} fontSize={14}>
                                 Free Delivery & Returns (Ts&Cs apply)
@@ -108,7 +108,7 @@ function Product({ post, categories }) {
 
 export async function getStaticPaths() {
     return {
-        paths: [{ params: { slug: "boots-3" } }],
+        paths: [{ params: { slug: "shoes" } }],
         fallback: true,
     };
 }
